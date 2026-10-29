@@ -25,7 +25,7 @@ You don't change any of these. You add `hello-app.yaml` and fill in the sections
 Docker Hub image I deployed (for example `ravi123/hello-app:v1`):
 
 ```
-<paste here>
+nidhie/hello-app:v1
 ```
 
 ## 2. Pods across nodes
@@ -33,7 +33,11 @@ Docker Hub image I deployed (for example `ravi123/hello-app:v1`):
 Output of `kubectl get pods -o wide` after you applied `hello-app.yaml`:
 
 ```
-<paste here>
+NAME                         READY   STATUS    RESTARTS      AGE   IP            NODE              NOMINATED NODE   READINESS GATES
+hello-app-86c99ddf7d-7q75z   1/1     Running   0             79s   10.244.2.6    desktop-worker2   <none>           <none>
+hello-app-86c99ddf7d-w5498   1/1     Running   0             78s   10.244.1.10   desktop-worker    <none>           <none>
+hello-app-86c99ddf7d-z4xjx   1/1     Running   0             79s   10.244.1.9    desktop-worker    <none>           <none>
+web-7887448d46-rzvwz         1/1     Running   2 (34m ago)   16d   10.244.2.2    desktop-worker2   <none>           <none>
 ```
 
 ## 3. The Service and its endpoints
@@ -41,7 +45,12 @@ Output of `kubectl get pods -o wide` after you applied `hello-app.yaml`:
 Output of `kubectl get service hello-app` and `kubectl get endpointslices -l kubernetes.io/service-name=hello-app`:
 
 ```
-<paste here>
+NAME        TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+hello-app   LoadBalancer   10.96.93.37   172.18.0.7    8080:30178/TCP   15m
+
+get endpointslices -l kubernetes.io/service-name=hello-app
+NAME              ADDRESSTYPE   PORTS   ENDPOINTS                           AGE
+hello-app-cn4dc   IPv4          80      10.244.1.9,10.244.2.6,10.244.1.10   16m
 ```
 
 ## 4. Browser
