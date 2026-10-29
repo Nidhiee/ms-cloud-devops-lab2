@@ -63,12 +63,22 @@ For each trap, write what you saw and why it happened, in two or three lines of 
 
 **Trap 1 — the local image.**
 
+The image built on my laptop was not automatically available to the Kubernetes nodes. The nodes needed to pull the image from Docker Hub, so I used `nidhie/hello-app:v1`.
+
 **Trap 2 — the selector typo.**
+
+When the Service selector was changed to `app: helo-app`, it no longer matched the Pod labels `app: hello-app`. The EndpointSlice therefore had no matching Pod endpoints. I restored the correct selector.
 
 **Trap 3 — the wrong targetPort.**
 
+The application listens on port 80 inside the container. Setting `targetPort: 8080` sent traffic to the wrong port, so the application could not be reached correctly. I restored `targetPort: 80`.
+
 **Trap 4 — the EXTERNAL-IP address.**
+
+The Service displayed an EXTERNAL-IP address, but that address was not necessarily directly reachable from my laptop. I used `http://localhost:8080` to access the application through Docker Desktop.
 
 ## 6. Your YAML vs the generated YAML
 
 Name two fields in the `--dry-run=client -o yaml` output that were not in your file. Why does your file still work without them?
+
+Two fields that may appear in generated YAML but were not explicitly included in my manifest are `creationTimestamp` and `status`. Kubernetes can populate or manage these fields automatically, so they do not need to be manually specified in my original manifest.
